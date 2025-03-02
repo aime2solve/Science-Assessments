@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Grading Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question h3 {
+            margin-bottom: 10px;
+        }
+        .options {
+            margin-left: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Biology Final</h1>
+    <form id="quizForm">
+        <div id="questions">
+            <!-- Questions will be inserted here dynamically -->
+        </div>
+        <button type="button" onclick="gradeQuiz()">Submit</button>
+    </form>
+    <div id="result" class="result"></div>
+
+    <script>
+        const questions = [
+            // Unit 1: Lab Safety and Basic Skills (10 Questions)
+            { question: "Which of the following is NOT a lab safety rule?", options: ["Wear safety goggles.", "Eat food during the lab.", "Tie back long hair.", "Report spills immediately."], answer: 1 },
+            { question: "What should you do if a chemical spills on your skin?", options: ["Wipe it off quickly.", "Ignore it.", "Rinse with water immediately.", "Tell your lab partner only."], answer: 2 },
+            { question: "Which symbol indicates a flammable substance?", options: ["Skull and crossbones", "Fire", "Exclamation mark", "Corrosive liquid"], answer: 1 },
+            { question: "What is the correct way to measure liquid in a graduated cylinder?", options: ["From the top of the meniscus", "From the bottom of the meniscus", "From the side of the cylinder", "From the top edge of the liquid"], answer: 1 },
+            { question: "Which piece of equipment is used to measure mass?", options: ["Graduated cylinder", "Triple beam balance", "Beaker", "Bunsen burner"], answer: 1 },
+            { question: "How should broken glass be disposed of?", options: ["Regular trash", "Recycling bin", "Designated glass disposal container", "Leave it on the table"], answer: 2 },
+            { question: "What is the first step in using a fire extinguisher?", options: ["Sweep the nozzle side to side.", "Pull the pin.", "Aim at the fire.", "Squeeze the handle."], answer: 1 },
+            { question: "Why is it important to tie back long hair in the lab?", options: ["It looks professional.", "To prevent it from catching fire or getting into chemicals.", "It keeps you focused.", "It prevents distractions for others."], answer: 1 },
+            { question: "What does the term PPE stand for?", options: ["Personal Protective Equipment", "Professional Protective Eyewear", "Primary Protection Equipment", "Personal Prevention Essentials"], answer: 0 },
+            { question: "What is the safest way to smell a chemical?", options: ["Directly inhale from the container.", "Waft the smell toward your nose.", "Hold it close to your nose.", "Don’t smell chemicals at all."], answer: 1 },
+
+            // Unit 2: Atoms and Molecules (10 Questions)
+            { question: "What are the four key elements in living organisms?", options: ["Hydrogen, Oxygen, Carbon, Nitrogen", "Helium, Argon, Krypton, Neon", "Gold, Silver, Platinum, Iron", "Calcium, Potassium, Sodium, Chlorine"], answer: 0 },
+            { question: "What type of bond involves the sharing of electrons?", options: ["Ionic", "Covalent", "Hydrogen", "Metallic"], answer: 1 },
+            { question: "Which organic molecule is the main source of energy for living things?", options: ["Lipids", "Proteins", "Carbohydrates", "Nucleic acids"], answer: 2 },
+            { question: "What is the primary function of proteins?", options: ["Store genetic information", "Speed up chemical reactions", "Provide insulation", "Store energy"], answer: 1 },
+            { question: "Which subatomic particles are found in the nucleus of an atom?", options: ["Electrons only", "Protons and neutrons", "Neutrons and electrons", "Protons and electrons"], answer: 1 },
+            { question: "What is an isotope?", options: ["An atom with the same number of protons but different neutrons", "An atom with different protons and neutrons", "An atom missing electrons", "An atom with extra energy"], answer: 0 },
+            { question: "What is the pH of a neutral solution?", options: ["7", "1", "14", "0"], answer: 0 },
+            { question: "What kind of bond forms between water molecules?", options: ["Ionic", "Covalent", "Hydrogen", "Metallic"], answer: 2 },
+            { question: "What is the monomer of proteins?", options: ["Nucleotides", "Amino acids", "Monosaccharides", "Fatty acids"], answer: 1 },
+            { question: "Which macromolecule stores genetic information?", options: ["Proteins", "Lipids", "Nucleic acids", "Carbohydrates"], answer: 2 },
+
+            // Unit 3: Cells (10 Questions)
+            { question: "Which organelle is known as the powerhouse of the cell?", options: ["Nucleus", "Mitochondria", "Chloroplast", "Golgi apparatus"], answer: 1 },
+            { question: "What is the function of ribosomes?", options: ["Store energy", "Synthesize proteins", "Digest waste", "Transport molecules"], answer: 1 },
+            { question: "What type of transport requires energy to move substances across the cell membrane?", options: ["Osmosis", "Facilitated diffusion", "Active transport", "Passive transport"], answer: 2 },
+            { question: "What structure is found in plant cells but not animal cells?", options: ["Mitochondria", "Cell wall", "Nucleus", "Ribosome"], answer: 1 },
+            { question: "What is the role of the nucleus?", options: ["Store energy", "Control cell activities", "Produce proteins", "Digest food"], answer: 1 },
+            { question: "Which organelle packages and transports proteins?", options: ["Endoplasmic reticulum", "Golgi apparatus", "Ribosomes", "Lysosomes"], answer: 1 },
+            { question: "What does the cell membrane do?", options: ["Controls what enters and exits the cell", "Stores genetic information", "Synthesizes proteins", "Produces energy"], answer: 0 },
+            { question: "Which organelle breaks down waste in the cell?", options: ["Lysosome", "Mitochondria", "Nucleus", "Golgi apparatus"], answer: 0 },
+            { question: "What is the fluid inside the cell called?", options: ["Cytoplasm", "Chloroplast", "Nucleoplasm", "Ribosome"], answer: 0 },
+            { question: "What process do chloroplasts perform?", options: ["Cellular respiration", "Photosynthesis", "Protein synthesis", "Fermentation"], answer: 1 },
+
+        // Unit 5: Genetics (15 Questions)
+        { question: "What is Mendel's law of segregation?", options: ["Genes are inherited in pairs.", "Alleles separate during gamete formation.", "All genes are dominant.", "Traits blend in offspring."], answer: 1 },
+        { question: "What is a genotype?", options: ["Physical appearance of an organism", "Genetic makeup of an organism", "Dominant allele only", "Recessive allele only"], answer: 1 },
+        { question: "What is a phenotype?", options: ["Genetic makeup of an organism", "Physical traits of an organism", "Combination of alleles", "Probability of a trait appearing"], answer: 1 },
+        { question: "What is a heterozygous genotype?", options: ["Two dominant alleles", "Two recessive alleles", "One dominant and one recessive allele", "No alleles present"], answer: 2 },
+        { question: "What is a homozygous genotype?", options: ["One dominant and one recessive allele", "Two identical alleles", "Two different alleles", "No alleles present"], answer: 1 },
+        { question: "What is a Punnett square used for?", options: ["Predicting the outcome of a genetic cross", "Measuring DNA sequences", "Determining the number of chromosomes", "Identifying mutations"], answer: 0 },
+        { question: "What is incomplete dominance?", options: ["Both alleles are expressed equally", "One allele is not completely dominant over another", "A trait is linked to the sex chromosomes", "The dominant allele masks the recessive"], answer: 1 },
+        { question: "What is codominance?", options: ["A trait controlled by multiple alleles", "Both alleles are fully expressed", "A mutation in DNA", "Recessive alleles are masked"], answer: 1 },
+        { question: "What are polygenic traits?", options: ["Traits controlled by multiple genes", "Traits controlled by one gene", "Traits inherited from only one parent", "Traits that skip generations"], answer: 0 },
+        { question: "What is a pedigree chart used for?", options: ["Mapping family history of a trait", "Identifying chromosome numbers", "Locating mutations in DNA", "Determining mRNA sequences"], answer: 0 },
+        { question: "What is a sex-linked trait?", options: ["A trait controlled by sex chromosomes", "A trait inherited from one parent only", "A trait found in autosomes", "A trait caused by mutations"], answer: 0 },
+        { question: "What is a carrier of a genetic disorder?", options: ["An organism with two copies of the disorder allele", "An organism with one copy of the disorder allele", "An organism unaffected by the disorder", "An organism that cannot reproduce"], answer: 1 },
+        { question: "What is the inheritance pattern for blood types?", options: ["Codominance", "Incomplete dominance", "Polygenic inheritance", "Sex-linked inheritance"], answer: 0 },
+        { question: "What is epistasis?", options: ["One gene affects the expression of another gene", "Genes are located on the same chromosome", "Traits blend in offspring", "Dominant alleles are always expressed"], answer: 0 },
+        { question: "What is the purpose of a test cross?", options: ["Determine an unknown genotype", "Predict mutation rates", "Analyze chromosome structure", "Measure phenotype ratios"], answer: 0 },
+// Unit 6: Biotechnology (15 Questions)
+{ question: "What is PCR (Polymerase Chain Reaction) used for?", options: ["Cutting DNA", "Amplifying DNA", "Sequencing DNA", "Transcribing RNA"], answer: 1 },
+{ question: "What is gel electrophoresis used for?", options: ["Amplifying DNA", "Cutting DNA", "Separating DNA fragments by size", "Sequencing RNA"], answer: 2 },
+{ question: "What enzyme is used to cut DNA at specific sequences?", options: ["DNA ligase", "Restriction enzyme", "RNA polymerase", "Helicase"], answer: 1 },
+{ question: "What is a plasmid?", options: ["A type of virus", "A small circular DNA molecule", "A protein used in transcription", "An enzyme used in DNA repair"], answer: 1 },
+{ question: "Which technique is used to edit genes?", options: ["Southern blotting", "CRISPR-Cas9", "Western blotting", "DNA microarray"], answer: 1 },
+{ question: "What is the purpose of DNA ligase in genetic engineering?", options: ["Cut DNA at specific sequences", "Join DNA fragments", "Separate DNA fragments", "Copy DNA"], answer: 1 },
+{ question: "What is transformation in biotechnology?", options: ["The process of converting RNA to DNA", "Introducing foreign DNA into a cell", "Amplifying DNA in a thermocycler", "Sequencing an entire genome"], answer: 1 },
+{ question: "Which of the following is an application of biotechnology?", options: ["Developing genetically modified crops", "Creating transgenic animals", "Producing insulin using bacteria", "All of the above"], answer: 3 },
+{ question: "What is the role of a DNA probe in molecular biology?", options: ["Cut DNA", "Join DNA fragments", "Detect specific DNA sequences", "Amplify DNA"], answer: 2 },
+{ question: "What is a genomic library?", options: ["A database of proteins", "A collection of cloned DNA fragments representing an organism's genome", "A collection of mRNA transcripts", "A sequencing method"], answer: 1 },
+{ question: "What is gene cloning?", options: ["Creating identical organisms", "Creating multiple copies of a gene", "Editing specific genes", "Amplifying DNA in a thermocycler"], answer: 1 },
+{ question: "Which process separates DNA fragments using an electric field?", options: ["Gel electrophoresis", "CRISPR", "PCR", "Microarray analysis"], answer: 0 },
+{ question: "What is the primary purpose of a DNA microarray?", options: ["To edit genes", "To analyze gene expression", "To sequence genomes", "To amplify DNA"], answer: 1 },
+{ question: "What is the role of Taq polymerase in PCR?", options: ["It cuts DNA at specific sequences", "It synthesizes new DNA strands", "It joins DNA fragments", "It separates DNA strands"], answer: 1 },
+{ question: "Which of the following is an ethical concern in biotechnology?", options: ["Creating genetically modified organisms", "Cloning animals", "Gene therapy", "All of the above"], answer: 3 },
+
+// Unit 7: Evolution and Natural Selection (15 Questions)
+{ question: "What is natural selection?", options: ["The survival of the fittest", "The change of an individual during its lifetime", "The process by which organisms with favorable traits survive and reproduce", "The creation of new species by humans"], answer: 2 },
+{ question: "Who is credited with the theory of evolution by natural selection?", options: ["Gregor Mendel", "Charles Darwin", "Jean-Baptiste Lamarck", "Alfred Russel Wallace"], answer: 1 },
+{ question: "What is a mutation?", options: ["A random change in DNA", "A form of artificial selection", "An adaptation to the environment", "The process of gene editing"], answer: 0 },
+{ question: "What is genetic drift?", options: ["A sudden increase in genetic variation", "The movement of individuals between populations", "Random changes in allele frequencies in small populations", "The evolution of new species"], answer: 2 },
+{ question: "What is gene flow?", options: ["The transfer of alleles between populations", "The process of speciation", "The loss of genetic diversity", "A random mutation in the genome"], answer: 0 },
+{ question: "What is an adaptation?", options: ["A learned behavior", "A trait that improves an organism's fitness", "A random mutation", "A sudden environmental change"], answer: 1 },
+{ question: "What is speciation?", options: ["The extinction of a species", "The evolution of new species", "The loss of genetic variation", "The migration of individuals"], answer: 1 },
+{ question: "What is a homologous structure?", options: ["A structure with the same function but different origins", "A structure with a similar origin but different functions", "A vestigial organ", "A random mutation"], answer: 1 },
+{ question: "What is a vestigial structure?", options: ["A structure that has no function", "A structure that is newly evolved", "A structure that serves the same purpose in all organisms", "A structure that helps with reproduction"], answer: 0 },
+{ question: "What does the fossil record provide evidence for?", options: ["The existence of evolution", "The sudden creation of life", "The immutability of species", "The lack of genetic mutations"], answer: 0 },
+{ question: "What is the bottleneck effect?", options: ["The increase in population size", "A reduction in population size that affects genetic diversity", "The movement of individuals between populations", "The evolution of new species"], answer: 1 },
+{ question: "What is the founder effect?", options: ["The movement of alleles between populations", "A reduction in genetic diversity due to a small founding population", "An increase in genetic mutations", "The extinction of a species"], answer: 1 },
+{ question: "What is the Hardy-Weinberg principle used for?", options: ["Measuring the age of fossils", "Determining if a population is evolving", "Measuring the rate of mutation", "Predicting speciation events"], answer: 1 },
+{ question: "What is artificial selection?", options: ["The natural evolution of traits", "The selective breeding of organisms by humans", "The random mutation of alleles", "The extinction of less-fit organisms"], answer: 1 },
+{ question: "What is convergent evolution?", options: ["The evolution of similar traits in unrelated species", "The evolution of new species from a common ancestor", "The loss of genetic variation", "The extinction of species over time"], answer: 0 },
+
+
+        ];
+
+  
+
+    let userAnswers = []; // Track attempts for each question
+    let totalScore = 0;
+
+    // Render questions dynamically
+    const questionContainer = document.getElementById("questions");
+    questions.forEach((q, index) => {
+        const questionDiv = document.createElement("div");
+        questionDiv.classList.add("question");
+
+        const questionText = document.createElement("h3");
+        questionText.textContent = `${index + 1}. ${q.question}`;
+        questionDiv.appendChild(questionText);
+
+        const optionsDiv = document.createElement("div");
+        optionsDiv.classList.add("options");
+
+        // Initialize attempts for this question
+        userAnswers[index] = { attempts: 0, correct: false };
+
+        q.options.forEach((option, optionIndex) => {
+            const optionButton = document.createElement("button");
+            optionButton.textContent = option;
+            optionButton.onclick = () => {
+                // Handle user guess
+                if (!userAnswers[index].correct) {
+                    userAnswers[index].attempts++;
+
+                    if (optionIndex === q.answer) {
+                        userAnswers[index].correct = true;
+
+                        // Calculate score based on attempts
+                        const score = userAnswers[index].attempts === 1 ? 2 : 1; // Full points for first guess, partial for second
+                        totalScore += score;
+
+                        optionButton.style.backgroundColor = "#b2f2bb";
+                        optionButton.disabled = true; // Disable after correct guess
+                        alert(`Correct! You earned ${score} point(s).`);
+                    } else {
+                        optionButton.style.backgroundColor = "#ffb3b3";
+                        optionButton.disabled = true; // Disable incorrect choice
+                        alert(userAnswers[index].attempts < 2 ? "Incorrect. Try again!" : "Incorrect. No points for this question.");
+                    }
+                }
+            };
+            optionsDiv.appendChild(optionButton);
+        });
+
+        questionDiv.appendChild(optionsDiv);
+        questionContainer.appendChild(questionDiv);
+    });
+
+    // Function to calculate and display the final score
+    function gradeQuiz() {
+        const maxScore = questions.length * 2; // Each question can score up to 2 points
+        document.getElementById("result").textContent = `Your final score: ${totalScore} / ${maxScore}`;
+    }
+</script>
+
+</body>
+</html>

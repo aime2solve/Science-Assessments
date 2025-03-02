@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Grading Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question h3 {
+            margin-bottom: 10px;
+        }
+        .options {
+            margin-left: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Physics Final</h1>
+    <form id="quizForm">
+        <div id="questions">
+            <!-- Questions will be inserted here dynamically -->
+        </div>
+        <button type="button" onclick="gradeQuiz()">Submit</button>
+    </form>
+    <div id="result" class="result"></div>
+
+    <script>
+        const questions = [
+     
+    { "question": "What is the formula for velocity?", "options": ["v = d/t", "v = m/a", "v = t/d", "v = a/m"], "answer": 0 },
+    { "question": "Which of the following is an example of a non-contact force?", "options": ["Friction", "Gravitational force", "Tension", "Air resistance"], "answer": 1 },
+    { "question": "What is the unit of force?", "options": ["Joule", "Newton", "Watt", "Meter"], "answer": 1 },
+    { "question": "An object in motion will continue in motion unless acted upon by an external force. This is known as:", "options": ["Newton’s First Law", "Newton’s Second Law", "Newton’s Third Law", "Law of Universal Gravitation"], "answer": 0 },
+    { "question": "If the mass of an object is doubled, its gravitational force will:", "options": ["Double", "Stay the same", "Halve", "Quadruple"], "answer": 0 },
+    { "question": "Which of the following is not a form of potential energy?", "options": ["Gravitational", "Chemical", "Kinetic", "Elastic"], "answer": 2 },
+    { "question": "What is the formula for gravitational potential energy?", "options": ["PE = mgh", "PE = mv²", "PE = ½mv²", "PE = Fd"], "answer": 0 },
+    { "question": "In a closed system, energy can be:", "options": ["Created and destroyed", "Converted from one form to another", "Created but not destroyed", "None of the above"], "answer": 1 },
+    { "question": "When an object’s speed increases, its kinetic energy:", "options": ["Decreases", "Increases", "Stays the same", "Varies with direction"], "answer": 1 },
+    { "question": "Which type of wave requires a medium to travel through?", "options": ["Electromagnetic", "Mechanical", "Transverse", "Longitudinal"], "answer": 1 },
+    { "question": "The frequency of a wave is defined as:", "options": ["The number of waves that pass a point per unit of time", "The height of the wave", "The distance between two consecutive crests", "The time it takes for one complete cycle"], "answer": 0 },
+    { "question": "Which of the following is true about sound waves?", "options": ["They are longitudinal waves", "They are transverse waves", "They do not require a medium", "They travel faster in vacuum than in air"], "answer": 0 },
+    { "question": "The energy of a photon is directly proportional to its:", "options": ["Frequency", "Wavelength", "Speed", "Amplitude"], "answer": 0 },
+    { "question": "Which of these is a characteristic of a wave with high frequency?", "options": ["Low energy", "High energy", "Long wavelength", "Low amplitude"], "answer": 1 },
+    { "question": "Which of the following is an example of refraction?", "options": ["A rainbow forming", "A pencil appearing bent in water", "A loud sound bouncing off a wall", "Light spreading out from a star"], "answer": 1 },
+    { "question": "What is the relationship between the speed, frequency, and wavelength of a wave?", "options": ["Speed = Frequency × Wavelength", "Speed = Wavelength ÷ Frequency", "Speed = Frequency ÷ Wavelength", "Speed = Frequency + Wavelength"], "answer": 0 },
+    { "question": "The energy of an electromagnetic wave is carried by:", "options": ["Photons", "Electrons", "Neutrons", "Protons"], "answer": 0 },
+    { "question": "Which of the following materials is most likely to be an insulator?", "options": ["Copper", "Wood", "Steel", "Gold"], "answer": 1 },
+    { "question": "Which of the following phenomena demonstrates the conservation of energy?", "options": ["A roller coaster ride", "A car engine running", "A battery powering a flashlight", "A ball thrown in the air"], "answer": 3 },
+    { "question": "The unit of power is the:", "options": ["Joule", "Watt", "Newton", "Ampere"], "answer": 1 },
+    { "question": "Which of the following has the greatest effect on the force of gravity between two objects?", "options": ["The mass of the objects", "The distance between them", "The temperature of the objects", "The speed of the objects"], "answer": 1 },
+    { "question": "An object moves with a constant velocity. What is the net force acting on it?", "options": ["Zero", "Equal to the mass of the object", "Equal to the gravitational force", "Equal to the normal force"], "answer": 0 },
+    { "question": "The work done to lift an object is equal to:", "options": ["The change in the object's kinetic energy", "The force applied multiplied by the distance moved", "The mass of the object", "The gravitational force acting on the object"], "answer": 1 },
+    { "question": "Which of the following is the best example of a mechanical wave?", "options": ["Radio waves", "Light waves", "Sound waves", "Microwaves"], "answer": 2 },
+    { "question": "What is the change in velocity of a 4 kg object initially moving at 5 m/s if it experiences a 20 N force for 2 seconds?", "options": ["10 m/s", "5 m/s", "20 m/s", "40 m/s"], "answer": 0 },
+    { "question": "The law of conservation of momentum states that:", "options": ["Momentum is always conserved in collisions", "Momentum can be destroyed in a system", "Momentum is inversely proportional to force", "Momentum can be created or destroyed in a system"], "answer": 0 },
+    { "question": "What happens to the velocity of an object as it falls freely under gravity?", "options": ["It increases", "It decreases", "It stays constant", "It fluctuates"], "answer": 0 },
+    { "question": "If a wave's frequency is halved, its wavelength will:", "options": ["Double", "Half", "Stay the same", "Quadruple"], "answer": 0 },
+    { "question": "The speed of light in a vacuum is approximately:", "options": ["3 × 10⁸ m/s", "1 × 10⁸ m/s", "3 × 10⁶ m/s", "3 × 10⁴ m/s"], "answer": 0 },
+    { "question": "The density of an object is:", "options": ["Its mass divided by its volume", "Its mass multiplied by its volume", "Its volume divided by its mass", "Its weight divided by its volume"], "answer": 0 },
+    { "question": "A 3 kg object moves with a velocity of 4 m/s. What is its kinetic energy?", "options": ["12 J", "24 J", "48 J", "6 J"], "answer": 1 },
+    { "question": "Which of the following does not affect the gravitational potential energy of an object?", "options": ["Height", "Mass", "Speed", "Gravitational acceleration"], "answer": 2 },
+    { "question": "The unit of electrical charge is:", "options": ["Ampere", "Coulomb", "Volt", "Ohm"], "answer": 1 },
+    { "question": "In an electric circuit, the total resistance is 20 ohms, and the current is 2 amperes. What is the voltage?", "options": ["10 V", "20 V", "40 V", "100 V"], "answer": 2 },
+    { "question": "Which of the following is the correct formula for calculating the force on an object?", "options": ["F = ma", "F = m/v", "F = v/m", "F = a/m"], "answer": 0 },
+    { "question": "If a force of 10 N is applied to a 5 kg object, what is its acceleration?", "options": ["0.5 m/s²", "2 m/s²", "5 m/s²", "50 m/s²"], "answer": 1 },
+    { "question": "The acceleration of an object is:", "options": ["The change in velocity over time", "The force acting on it", "The distance it travels", "The mass of the object"], "answer": 0 },
+    { "question": "If an object moves at a constant velocity, its acceleration is:", "options": ["Zero", "Constant", "Increasing", "Decreasing"], "answer": 0 },
+    { "question": "A 2 kg object is moving with a velocity of 3 m/s. What is its momentum?", "options": ["6 kg·m/s", "3 kg·m/s", "1 kg·m/s", "9 kg·m/s"], "answer": 0 },
+    { "question": "The kinetic energy of an object is directly proportional to its:", "options": ["Mass", "Velocity", "Distance", "Force"], "answer": 1 },
+    { "question": "A 10 kg object is moving at a velocity of 5 m/s. What is its kinetic energy?", "options": ["125 J", "50 J", "25 J", "10 J"], "answer": 0 },
+    { "question": "Which of the following objects has the highest velocity?", "options": ["A car on a highway", "A rocket in space", "A plane on the runway", "A ball falling from a great height"], "answer": 1 },
+    { "question": "The speed of a wave is:", "options": ["Directly proportional to its frequency", "Inversely proportional to its wavelength", "Directly proportional to its amplitude", "Directly proportional to its velocity"], "answer": 0 },
+    { "question": "A car travels 60 meters in 5 seconds. What is its average speed?", "options": ["12 m/s", "60 m/s", "10 m/s", "50 m/s"], "answer": 0 },
+    { "question": "If the frequency of a sound wave increases, its pitch will:", "options": ["Increase", "Decrease", "Stay the same", "Become inaudible"], "answer": 0 },
+    { "question": "If you double the frequency of a wave, what happens to its wavelength?", "options": ["It halves", "It doubles", "It stays the same", "It quadruples"], "answer": 0 },
+
+  { "question": "What is Newton's first law of motion?", "options": ["An object in motion stays in motion unless acted upon by a force", "Force equals mass times acceleration", "For every action, there is an equal and opposite reaction", "Objects at rest remain at rest"], "answer": 0 },
+  { "question": "What is the unit of force?", "options": ["Kilogram", "Newton", "Meter", "Second"], "answer": 1 },
+  { "question": "Which of the following is an example of an unbalanced force?", "options": ["A book resting on a table", "A car accelerating on a straight road", "A satellite orbiting Earth", "A box being pushed with a constant velocity"], "answer": 1 },
+  { "question": "Which of the following is true about the force of gravity?", "options": ["It only acts on objects with mass", "It is stronger on the Moon", "It increases with altitude", "It decreases as mass increases"], "answer": 0 },
+  { "question": "What does the law of conservation of energy state?", "options": ["Energy can be created but not destroyed", "Energy is always lost in conversions", "Energy cannot be created or destroyed", "Energy only exists in potential form"], "answer": 2 },
+  { "question": "Which of the following describes the motion of an object in free fall?", "options": ["The object is accelerating at a constant rate due to gravity", "The object moves at constant speed", "The object moves faster as air resistance increases", "The object experiences an upward force"], "answer": 0 },
+  { "question": "Which type of energy is stored in a stretched spring?", "options": ["Kinetic energy", "Potential energy", "Chemical energy", "Electrical energy"], "answer": 1 },
+  { "question": "In which direction does an object in circular motion experience a force?", "options": ["Tangential", "Radial", "Perpendicular", "At an angle to its motion"], "answer": 1 },
+  { "question": "What is the acceleration of an object in free fall near Earth's surface?", "options": ["9.8 m/s²", "0 m/s²", "10 m/s²", "5 m/s²"], "answer": 0 },
+  { "question": "What is the difference between speed and velocity?", "options": ["Speed includes direction, velocity does not", "Speed is a vector, velocity is a scalar", "Speed is the rate at which an object covers distance, velocity includes direction", "Velocity includes distance but speed does not"], "answer": 2 },
+  { "question": "What does a positive slope on a velocity vs. time graph represent?", "options": ["Deceleration", "Constant velocity", "Acceleration", "Zero velocity"], "answer": 2 },
+  { "question": "What is the formula for calculating acceleration?", "options": ["a = Δv/Δt", "a = v/t", "a = Δx/Δt", "a = F/m"], "answer": 0 },
+  { "question": "Which of the following is an example of potential energy?", "options": ["A moving car", "A book on a shelf", "A flowing river", "A spinning top"], "answer": 1 },
+  { "question": "Which type of energy conversion occurs in a flashlight?", "options": ["Chemical to thermal", "Electrical to light", "Kinetic to thermal", "Gravitational to kinetic"], "answer": 1 },
+  { "question": "How is power calculated?", "options": ["P = W/t", "P = F × d", "P = m × v", "P = ΔE/t"], "answer": 0 },
+  { "question": "What is the relationship between mass and acceleration in Newton's second law?", "options": ["Mass is inversely proportional to acceleration", "Mass is directly proportional to acceleration", "Mass does not affect acceleration", "Mass and acceleration are unrelated"], "answer": 0 },
+  { "question": "What is the SI unit of energy?", "options": ["Watt", "Joule", "Newton", "Kelvin"], "answer": 1 },
+  { "question": "What happens to the force of gravity as the distance between two objects increases?", "options": ["It increases", "It decreases", "It remains constant", "It becomes zero"], "answer": 1 },
+  { "question": "Which law explains the relationship between force, mass, and acceleration?", "options": ["Newton's First Law", "Newton's Second Law", "Newton's Third Law", "Law of Universal Gravitation"], "answer": 1 },
+  { "question": "What is the momentum of an object?", "options": ["The product of mass and velocity", "The product of force and time", "The product of velocity and acceleration", "The product of force and displacement"], "answer": 0 },
+  { "question": "Which of the following is an example of a non-contact force?", "options": ["Friction", "Magnetic force", "Applied force", "Tension"], "answer": 1 },
+  { "question": "Which force is responsible for the orbit of planets?", "options": ["Gravitational force", "Frictional force", "Tension", "Electromagnetic force"], "answer": 0 },
+  { "question": "What does the term 'work' refer to in physics?", "options": ["The transfer of energy through force", "The amount of energy an object has", "The change in velocity", "The resistance to motion"], "answer": 0 },
+  { "question": "Which type of wave is light?", "options": ["Transverse wave", "Longitudinal wave", "Mechanical wave", "Electromagnetic wave"], "answer": 3 },
+  { "question": "What is the speed of light in a vacuum?", "options": ["3.00 x 10^8 m/s", "3.00 x 10^6 m/s", "1.00 x 10^8 m/s", "1.00 x 10^6 m/s"], "answer": 0 },
+  { "question": "Which of the following is an example of a longitudinal wave?", "options": ["Sound wave", "Light wave", "Water wave", "Seismic wave"], "answer": 0 },
+  { "question": "What is the frequency of a wave?", "options": ["The number of waves that pass a point per second", "The distance between two crests", "The speed of the wave", "The height of the wave"], "answer": 0 },
+  { "question": "What is the unit of frequency?", "options": ["Hertz", "Joule", "Newton", "Meter"], "answer": 0 },
+  { "question": "Which of the following is an example of refraction?", "options": ["A pencil looks bent in a glass of water", "A balloon popping", "The sound of a bell", "A stone skipping on water"], "answer": 0 },
+  { "question": "What is the law of reflection?", "options": ["The angle of incidence equals the angle of reflection", "The angle of refraction equals the angle of incidence", "Light bends when it passes through different mediums", "The speed of light changes as it passes through water"], "answer": 0 },
+  { "question": "Which of the following is an example of a simple machine?", "options": ["Pulley", "Car engine", "Electric fan", "Clock"], "answer": 0 },
+  { "question": "Which of the following is a non-renewable energy resource?", "options": ["Solar energy", "Wind energy", "Coal", "Geothermal energy"], "answer": 2 },
+  { "question": "What is the main source of energy for Earth's climate?", "options": ["The Moon", "The Sun", "The Earth", "The Wind"], "answer": 1 },
+  { "question": "What is the total mechanical energy of an object?", "options": ["The sum of its kinetic and potential energy", "The sum of its kinetic energy and work done", "The total energy it radiates", "The energy it receives from the surroundings"], "answer": 0 },
+
+
+
+
+
+        ];
+
+  
+
+    let userAnswers = []; // Track attempts for each question
+    let totalScore = 0;
+
+    // Render questions dynamically
+    const questionContainer = document.getElementById("questions");
+    questions.forEach((q, index) => {
+        const questionDiv = document.createElement("div");
+        questionDiv.classList.add("question");
+
+        const questionText = document.createElement("h3");
+        questionText.textContent = `${index + 1}. ${q.question}`;
+        questionDiv.appendChild(questionText);
+
+        const optionsDiv = document.createElement("div");
+        optionsDiv.classList.add("options");
+
+        // Initialize attempts for this question
+        userAnswers[index] = { attempts: 0, correct: false };
+
+        q.options.forEach((option, optionIndex) => {
+            const optionButton = document.createElement("button");
+            optionButton.textContent = option;
+            optionButton.onclick = () => {
+                // Handle user guess
+                if (!userAnswers[index].correct) {
+                    userAnswers[index].attempts++;
+
+                    if (optionIndex === q.answer) {
+                        userAnswers[index].correct = true;
+
+                        // Calculate score based on attempts
+                        const score = userAnswers[index].attempts === 1 ? 2 : 1; // Full points for first guess, partial for second
+                        totalScore += score;
+
+                        optionButton.style.backgroundColor = "#b2f2bb";
+                        optionButton.disabled = true; // Disable after correct guess
+                        alert(`Correct! You earned ${score} point(s).`);
+                    } else {
+                        optionButton.style.backgroundColor = "#ffb3b3";
+                        optionButton.disabled = true; // Disable incorrect choice
+                        alert(userAnswers[index].attempts < 2 ? "Incorrect. Try again!" : "Incorrect. No points for this question.");
+                    }
+                }
+            };
+            optionsDiv.appendChild(optionButton);
+        });
+
+        questionDiv.appendChild(optionsDiv);
+        questionContainer.appendChild(questionDiv);
+    });
+
+    // Function to calculate and display the final score
+    function gradeQuiz() {
+        const maxScore = questions.length * 2; // Each question can score up to 2 points
+        document.getElementById("result").textContent = `Your final score: ${totalScore} / ${maxScore}`;
+    }
+</script>
+
+</body>
+</html>

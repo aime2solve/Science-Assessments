@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Grading Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question h3 {
+            margin-bottom: 10px;
+        }
+        .options {
+            margin-left: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chemistry Final</h1>
+    <form id="quizForm">
+        <div id="questions">
+            <!-- Questions will be inserted here dynamically -->
+        </div>
+        <button type="button" onclick="gradeQuiz()">Submit</button>
+    </form>
+    <div id="result" class="result"></div>
+
+    <script>
+        const questions = [
+           { question: "What is the charge of a proton?", options: ["Positive", "Negative", "Neutral", "Variable"], answer: 0 },
+    { question: "Which subatomic particle determines the element?", options: ["Electron", "Proton", "Neutron", "Isotope"], answer: 1 },
+    { question: "What is the chemical symbol for Sodium?", options: ["S", "Na", "N", "So"], answer: 1 },
+    { question: "What is the mass number of an atom with 6 protons, 6 neutrons, and 6 electrons?", options: ["6", "12", "18", "24"], answer: 1 },
+    { question: "What type of bond forms when electrons are shared between atoms?", options: ["Ionic", "Covalent", "Metallic", "Hydrogen"], answer: 1 },
+    { question: "What type of bond forms between oppositely charged ions?", options: ["Ionic", "Covalent", "Metallic", "Hydrogen"], answer: 0 },
+    { question: "Which of the following is a diatomic molecule?", options: ["H₂", "CO₂", "CH₄", "NaCl"], answer: 0 },
+    { question: "What is the law that states matter cannot be created or destroyed?", options: ["Law of Conservation of Mass", "Law of Definite Proportions", "Law of Multiple Proportions", "Law of Conservation of Energy"], answer: 0 },
+    { question: "What is the pH of a neutral solution?", options: ["0", "7", "14", "10"], answer: 1 },
+    { question: "Which element has the highest electronegativity?", options: ["Fluorine", "Oxygen", "Chlorine", "Carbon"], answer: 0 },
+    { question: "What is the molar mass of H₂O?", options: ["16 g/mol", "18 g/mol", "20 g/mol", "14 g/mol"], answer: 1 },
+    { question: "What is the chemical formula for ammonia?", options: ["NH₄", "NH₃", "NO₂", "N₂H₄"], answer: 1 },
+    { question: "Which state of matter has a definite volume but no definite shape?", options: ["Solid", "Liquid", "Gas", "Plasma"], answer: 1 },
+    { question: "What is the main gas in Earth's atmosphere?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], answer: 2 },
+    { question: "What is Avogadro's number?", options: ["3.14", "6.022 × 10²³", "9.81", "2.71"], answer: 1 },
+    { question: "Which type of reaction involves two or more reactants forming one product?", options: ["Synthesis", "Decomposition", "Single Replacement", "Double Replacement"], answer: 0 },
+    { question: "Which type of reaction involves a compound breaking down into simpler substances?", options: ["Synthesis", "Decomposition", "Single Replacement", "Double Replacement"], answer: 1 },
+    { question: "Which is an example of a homogeneous mixture?", options: ["Sand and water", "Saltwater", "Oil and water", "Trail mix"], answer: 1 },
+    { question: "What is the term for the energy needed to start a chemical reaction?", options: ["Activation energy", "Potential energy", "Kinetic energy", "Bond energy"], answer: 0 },
+    { question: "What is the name of the process by which a liquid turns into a gas?", options: ["Condensation", "Evaporation", "Sublimation", "Deposition"], answer: 1 },
+    { question: "Which element is most abundant in the universe?", options: ["Oxygen", "Carbon", "Hydrogen", "Helium"], answer: 2 },
+    { question: "What is the chemical formula for table salt?", options: ["KCl", "NaCl", "MgCl₂", "CaCl₂"], answer: 1 },
+    { question: "Which is a property of acids?", options: ["Bitter taste", "Slippery feel", "Turns blue litmus red", "Reacts with bases to form water"], answer: 2 },
+    { question: "Which is a property of bases?", options: ["Sour taste", "Turns red litmus blue", "Reacts with metals", "Produces H⁺ ions in solution"], answer: 1 },
+    { question: "What is the name of the horizontal rows on the periodic table?", options: ["Groups", "Periods", "Families", "Series"], answer: 1 },
+    { question: "Which element is a noble gas?", options: ["Helium", "Hydrogen", "Nitrogen", "Chlorine"], answer: 0 },
+    { question: "What is the balanced equation for the combustion of methane (CH₄)?", options: ["CH₄ + 2O₂ → CO₂ + 2H₂O", "CH₄ + O₂ → CO₂ + H₂O", "2CH₄ + 3O₂ → 2CO + 4H₂O", "CH₄ + O₂ → CO + H₂"], answer: 0 },
+    { question: "What is the process of separating a mixture based on boiling points?", options: ["Filtration", "Distillation", "Chromatography", "Decantation"], answer: 1 },
+    { question: "What does the pH scale measure?", options: ["Concentration of electrons", "Acidity and basicity", "Temperature", "Reactivity"], answer: 1 },
+    { question: "What is the main component of natural gas?", options: ["Propane", "Methane", "Butane", "Ethane"], answer: 1 },
+    { question: "Which element is liquid at room temperature?", options: ["Mercury", "Gold", "Copper", "Silver"], answer: 0 },
+    { question: "What type of reaction is represented by A + BC → AC + B?", options: ["Synthesis", "Single Replacement", "Decomposition", "Combustion"], answer: 1 },
+    { question: "Which particle is responsible for chemical bonding?", options: ["Proton", "Neutron", "Electron", "Photon"], answer: 2 },
+    { question: "What does STP stand for in chemistry?", options: ["Standard Temperature and Pressure", "Standard Thermal Pressure", "Simple Temperature Point", "Standardized Thermodynamic Process"], answer: 0 },
+    { question: "What is the name of the process where a gas turns directly into a solid?", options: ["Evaporation", "Condensation", "Deposition", "Sublimation"], answer: 2 },
+    { question: "What is the SI unit for pressure?", options: ["Pascal", "Newton", "Joule", "Watt"], answer: 0 },
+    { question: "What is the formula for calculating density?", options: ["Mass × Volume", "Mass ÷ Volume", "Volume ÷ Mass", "Mass + Volume"], answer: 1 },
+    { question: "What is the most electronegative element on the periodic table?", options: ["Fluorine", "Oxygen", "Nitrogen", "Chlorine"], answer: 0 },
+    { question: "What is the common name for H₂SO₄?", options: ["Hydrochloric acid", "Sulfuric acid", "Nitric acid", "Acetic acid"], answer: 1 },
+    { question: "What type of reaction releases energy into the surroundings?", options: ["Endothermic", "Exothermic", "Isothermal", "Adiabatic"], answer: 1 },
+    { question: "What is the formula for calculating molarity?", options: ["moles ÷ volume", "volume ÷ moles", "mass ÷ volume", "moles × volume"], answer: 0 },
+    { question: "Which gas law states that pressure and volume are inversely proportional at constant temperature?", options: ["Boyle's Law", "Charles's Law", "Avogadro's Law", "Ideal Gas Law"], answer: 0 },
+    { question: "What is the main intermolecular force in water?", options: ["Ionic bonds", "Hydrogen bonds", "London dispersion forces", "Dipole-dipole interactions"], answer: 1 },
+    { question: "What is the name of the process in which a liquid turns into a solid?", options: ["Sublimation", "Freezing", "Condensation", "Deposition"], answer: 1 },
+    { question: "Which periodic trend increases as you move left to right across a period?", options: ["Atomic radius", "Ionization energy", "Metallic character", "Electronegativity"], answer: 3 },
+    { question: "What is the pH of a solution with [H⁺] = 1 × 10⁻³ M?", options: ["3", "1", "7", "10"], answer: 0 },
+    { question: "What is the chemical formula for calcium chloride?", options: ["CaCl", "CaCl₂", "Ca₂Cl", "Ca₂Cl₂"], answer: 1 },
+    { question: "What is the name of the phase change from gas to liquid?", options: ["Sublimation", "Condensation", "Deposition", "Freezing"], answer: 1 },
+    { question: "Which element is the lightest on the periodic table?", options: ["Hydrogen", "Helium", "Lithium", "Beryllium"], answer: 0 },
+    { question: "What is the oxidation number of oxygen in most compounds?", options: ["-1", "-2", "+1", "+2"], answer: 1 },
+    { question: "What does the term 'aqueous solution' mean?", options: ["A solution in alcohol", "A solution in water", "A solution in oil", "A solution in ether"], answer: 1 },
+    { question: "What type of reaction is represented by AB → A + B?", options: ["Synthesis", "Decomposition", "Single Replacement", "Combustion"], answer: 1 },
+    { question: "Which element has the atomic number 8?", options: ["Oxygen", "Carbon", "Nitrogen", "Fluorine"], answer: 0 },
+    { question: "What is the process of forming ions by losing or gaining electrons called?", options: ["Neutralization", "Ionization", "Polarization", "Reduction"], answer: 1 },
+    { question: "What is the formula for calculating percent yield?", options: ["(Actual yield ÷ Theoretical yield) × 100", "(Theoretical yield ÷ Actual yield) × 100", "Mass ÷ Volume × 100", "(Mass × Volume) ÷ 100"], answer: 0 },
+    { question: "What does a catalyst do in a chemical reaction?", options: ["Increases the reaction's energy", "Decreases the reaction's energy", "Lowers activation energy", "Raises activation energy"], answer: 2 },
+    { question: "What is the shape of a water molecule?", options: ["Linear", "Bent", "Tetrahedral", "Trigonal planar"], answer: 1 },
+    { question: "Which gas law states that the volume of a gas is directly proportional to its temperature?", options: ["Boyle's Law", "Charles's Law", "Avogadro's Law", "Dalton's Law"], answer: 1 },
+    { question: "Which isotope of hydrogen has one neutron?", options: ["Protium", "Deuterium", "Tritium", "Hydrogen-1"], answer: 1 },
+    { question: "What is the electron configuration of sodium (Na)?", options: ["1s² 2s² 2p⁶ 3s¹", "1s² 2s² 2p⁶", "1s² 2s² 2p⁵", "1s² 2s² 2p⁶ 3p¹"], answer: 0 },
+    { question: "Which reaction type involves the transfer of electrons?", options: ["Combustion", "Oxidation-reduction", "Neutralization", "Synthesis"], answer: 1 },
+    { question: "What is the molar volume of a gas at STP?", options: ["1 L", "22.4 L", "0.0821 L", "273 L"], answer: 1 },
+    { question: "What is the main product of the combustion of a hydrocarbon in sufficient oxygen?", options: ["CO₂ and H₂O", "CO and H₂O", "C and O₂", "H₂ and O₂"], answer: 0 },
+    { question: "What is the term for a substance that speeds up a chemical reaction without being consumed?", options: ["Inhibitor", "Catalyst", "Reactant", "Product"], answer: 1 },
+    { question: "What is the strongest type of intermolecular force?", options: ["Dipole-dipole interactions", "Hydrogen bonding", "London dispersion forces", "Covalent bonding"], answer: 1 },
+    { question: "Which metal reacts vigorously with water?", options: ["Iron", "Copper", "Potassium", "Silver"], answer: 2 },
+    { question: "What is the correct formula for aluminum sulfate?", options: ["AlSO₄", "Al₂(SO₄)₃", "Al(SO₄)₃", "Al₂SO₄"], answer: 1 },
+    { question: "What is the process of splitting a compound into its ions in solution called?", options: ["Electrolysis", "Ionization", "Dissociation", "Neutralization"], answer: 2 },
+    { question: "Which type of reaction involves an acid and a base forming a salt and water?", options: ["Combustion", "Neutralization", "Oxidation", "Synthesis"], answer: 1 },
+    { question: "What is the name of the constant used to relate the energy of a photon to its frequency?", options: ["Planck's constant", "Avogadro's number", "Boltzmann constant", "Faraday's constant"], answer: 0 },
+    { question: "What is the pH range of a strong acid?", options: ["0-3", "4-7", "8-10", "11-14"], answer: 0 },
+    { question: "What is the name for the smallest unit of a covalent compound?", options: ["Ion", "Molecule", "Atom", "Crystal"], answer: 1 },
+    { question: "Which state of matter has the least kinetic energy?", options: ["Solid", "Liquid", "Gas", "Plasma"], answer: 0 },
+    { question: "What happens to the pressure of a gas if its volume is halved, keeping temperature constant?", options: ["Pressure is halved", "Pressure doubles", "Pressure stays the same", "Pressure triples"], answer: 1 }
+
+
+
+        ];
+
+  
+
+    let userAnswers = []; // Track attempts for each question
+    let totalScore = 0;
+
+    // Render questions dynamically
+    const questionContainer = document.getElementById("questions");
+    questions.forEach((q, index) => {
+        const questionDiv = document.createElement("div");
+        questionDiv.classList.add("question");
+
+        const questionText = document.createElement("h3");
+        questionText.textContent = `${index + 1}. ${q.question}`;
+        questionDiv.appendChild(questionText);
+
+        const optionsDiv = document.createElement("div");
+        optionsDiv.classList.add("options");
+
+        // Initialize attempts for this question
+        userAnswers[index] = { attempts: 0, correct: false };
+
+        q.options.forEach((option, optionIndex) => {
+            const optionButton = document.createElement("button");
+            optionButton.textContent = option;
+            optionButton.onclick = () => {
+                // Handle user guess
+                if (!userAnswers[index].correct) {
+                    userAnswers[index].attempts++;
+
+                    if (optionIndex === q.answer) {
+                        userAnswers[index].correct = true;
+
+                        // Calculate score based on attempts
+                        const score = userAnswers[index].attempts === 1 ? 2 : 1; // Full points for first guess, partial for second
+                        totalScore += score;
+
+                        optionButton.style.backgroundColor = "#b2f2bb";
+                        optionButton.disabled = true; // Disable after correct guess
+                        alert(`Correct! You earned ${score} point(s).`);
+                    } else {
+                        optionButton.style.backgroundColor = "#ffb3b3";
+                        optionButton.disabled = true; // Disable incorrect choice
+                        alert(userAnswers[index].attempts < 2 ? "Incorrect. Try again!" : "Incorrect. No points for this question.");
+                    }
+                }
+            };
+            optionsDiv.appendChild(optionButton);
+        });
+
+        questionDiv.appendChild(optionsDiv);
+        questionContainer.appendChild(questionDiv);
+    });
+
+    // Function to calculate and display the final score
+    function gradeQuiz() {
+        const maxScore = questions.length * 2; // Each question can score up to 2 points
+        document.getElementById("result").textContent = `Your final score: ${totalScore} / ${maxScore}`;
+    }
+</script>
+
+</body>
+</html>
