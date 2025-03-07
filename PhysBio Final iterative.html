@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Grading Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question h3 {
+            margin-bottom: 10px;
+        }
+        .options {
+            margin-left: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>PhysBio Final</h1>
+    <form id="quizForm">
+        <div id="questions">
+            <!-- Questions will be inserted here dynamically -->
+        </div>
+        <button type="button" onclick="gradeQuiz()">Submit</button>
+    </form>
+    <div id="result" class="result"></div>
+
+    <script>
+        const questions = [
+     
+    { "question": "Which of the following best describes the scientific method?", "options": ["A linear sequence of steps", "A cyclic process of testing and refining ideas", "A fixed set of experiments", "A method only used in chemistry"], "answer": 1 },
+    { "question": "What is the main purpose of a control group in an experiment?", "options": ["To receive the experimental treatment", "To act as a standard for comparison", "To change the outcome of the experiment", "To increase the sample size"], "answer": 1 },
+    { "question": "Which subatomic particle determines the identity of an element?", "options": ["Electron", "Neutron", "Proton", "Photon"], "answer": 2 },
+    { "question": "What type of bond is formed when atoms share electrons?", "options": ["Ionic bond", "Covalent bond", "Hydrogen bond", "Metallic bond"], "answer": 1 },
+    { "question": "According to the Law of Conservation of Mass, what happens in a chemical reaction?", "options": ["Mass is lost", "Mass is gained", "Mass remains constant", "Mass is converted into energy"], "answer": 2 },
+    { "question": "What type of energy transformation occurs in photosynthesis?", "options": ["Thermal to chemical", "Chemical to light", "Light to chemical", "Nuclear to electrical"], "answer": 2 },
+    { "question": "What is the SI unit of force?", "options": ["Joule", "Newton", "Watt", "Pascal"], "answer": 1 },
+    { "question": "What type of wave requires a medium to travel?", "options": ["Sound wave", "Light wave", "Electromagnetic wave", "X-ray"], "answer": 0 },
+    { "question": "Which phenomenon explains why a straw looks bent in a glass of water?", "options": ["Reflection", "Refraction", "Diffraction", "Interference"], "answer": 1 },
+    { "question": "Which part of the electromagnetic spectrum has the highest energy?", "options": ["Radio waves", "Infrared waves", "Ultraviolet rays", "Gamma rays"], "answer": 3 },
+    { "question": "Which law states that voltage equals current times resistance?", "options": ["Newton’s first law", "Faraday’s law", "Ohm’s law", "Coulomb’s law"], "answer": 2 },
+    { "question": "Which subatomic particle is responsible for electric charge?", "options": ["Neutron", "Electron", "Proton", "Photon"], "answer": 1 },
+    { "question": "What is the monomer unit of proteins?", "options": ["Monosaccharides", "Amino acids", "Nucleotides", "Fatty acids"], "answer": 1 },
+    { "question": "What organelle is responsible for energy production in cells?", "options": ["Nucleus", "Mitochondria", "Ribosome", "Golgi apparatus"], "answer": 1 },
+    { "question": "Who is known as the father of genetics?", "options": ["Charles Darwin", "Gregor Mendel", "James Watson", "Rosalind Franklin"], "answer": 1 },
+    { "question": "Which molecule carries genetic information?", "options": ["Carbohydrates", "DNA", "Protein", "Lipid"], "answer": 1 },
+    { "question": "Which of the following is an example of a biotic factor in an ecosystem?", "options": ["Temperature", "Sunlight", "Soil composition", "Predators"], "answer": 3 },
+    { "question": "What term describes the maximum population size an environment can support?", "options": ["Carrying capacity", "Exponential growth", "Limiting factor", "Population density"], "answer": 0 },
+    { "question": "Which of the following is a nonrenewable resource?", "options": ["Wind", "Solar", "Coal", "Hydropower"], "answer": 2 },
+    { "question": "Which human body system is responsible for transporting oxygen and nutrients?", "options": ["Digestive system", "Circulatory system", "Respiratory system", "Endocrine system"], "answer": 1 },
+    { "question": "What is the function of the nervous system?", "options": ["Transport nutrients", "Regulate hormones", "Send and receive signals", "Break down food"], "answer": 2 },
+    { "question": "Which of the following is an ethical issue in scientific research?", "options": ["Ensuring accuracy of data", "Plagiarism", "Collaborating with others", "Publishing findings"], "answer": 1 },
+    { "question": "Which field studies the impact of human activities on the environment?", "options": ["Biotechnology", "Ecology", "Astrobiology", "Geology"], "answer": 1 },
+    { "question": "Which skill is essential for scientific literacy?", "options": ["Memorizing formulas", "Critical thinking", "Ignoring contradictory evidence", "Avoiding new technology"], "answer": 1 },
+    { "question": "What is the role of enzymes in biochemical reactions?", "options": ["They slow down reactions", "They act as catalysts", "They get used up in reactions", "They provide energy for reactions"], "answer": 1 },
+    { "question": "Which organ system regulates homeostasis through hormones?", "options": ["Nervous system", "Digestive system", "Endocrine system", "Respiratory system"], "answer": 2 },
+    { "question": "Which of the following is a greenhouse gas?", "options": ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"], "answer": 2 },
+    { "question": "Which state of matter has a definite volume but takes the shape of its container?", "options": ["Solid", "Liquid", "Gas", "Plasma"], "answer": 1 },
+    { "question": "Which of the following best explains why repeated trials are important in an experiment?", "options": ["To confirm that the results are reliable", "To get the desired outcome", "To make the experiment more complex", "To increase the cost of the experiment"], "answer": 0 },
+    { "question": "A student is testing how different soil types affect plant growth. What is the dependent variable?", "options": ["Type of soil", "Amount of sunlight", "Plant height", "Amount of water"], "answer": 2 },
+    { "question": "Which factor most influences an element’s chemical reactivity?", "options": ["The number of protons", "The number of neutrons", "The number of valence electrons", "The atomic mass"], "answer": 2 },
+    { "question": "A chemical reaction releases heat and light. What type of reaction is this?", "options": ["Endothermic", "Exothermic", "Decomposition", "Neutralization"], "answer": 1 },
+    { "question": "Which of Newton’s laws explains why rockets launch by expelling gas downward?", "options": ["First law", "Second law", "Third law", "Law of gravitation"], "answer": 2 },
+    { "question": "A ball is thrown straight up. At the highest point, what is its velocity?", "options": ["Zero", "At its maximum", "Equal to acceleration", "Negative"], "answer": 0 },
+    { "question": "Why do astronauts in orbit experience weightlessness?", "options": ["There is no gravity in space", "They are in free fall", "They are too far from Earth", "They are moving too fast"], "answer": 1 },
+    { "question": "Why do sound waves travel faster in solids than in gases?", "options": ["Solids are denser", "Solids have more energy", "Solids are lighter", "Solids absorb more sound"], "answer": 0 },
+    { "question": "Which color of light has the highest energy?", "options": ["Red", "Green", "Blue", "Violet"], "answer": 3 },
+    { "question": "A circuit has a voltage of 12V and a resistance of 4Ω. What is the current?", "options": ["3A", "8A", "48A", "0.33A"], "answer": 0 },
+    { "question": "Which of the following best describes the function of an enzyme?", "options": ["Enzymes break down cell walls", "Enzymes speed up chemical reactions", "Enzymes provide energy to cells", "Enzymes store genetic information"], "answer": 1 },
+    { "question": "Why do plants appear green?", "options": ["They absorb green light", "They reflect green light", "They contain no pigments", "They only absorb blue light"], "answer": 1 },
+    { "question": "Which of the following correctly describes the structure of DNA?", "options": ["Single helix", "Double helix", "Triple helix", "Linear strand"], "answer": 1 },
+    { "question": "Why are offspring genetically unique in sexual reproduction?", "options": ["Crossing over in meiosis", "Mitosis copies DNA exactly", "Only one parent provides DNA", "Mutations occur randomly"], "answer": 0 },
+    { "question": "Which of the following is an example of codominance?", "options": ["A white and red flower producing pink offspring", "A black and white cow showing both colors", "A recessive trait skipping generations", "One allele completely dominating another"], "answer": 1 },
+    { "question": "Which factor is necessary for natural selection to occur?", "options": ["Identical offspring", "Limited resources", "No competition", "All individuals surviving"], "answer": 1 },
+    { "question": "Why do invasive species often outcompete native species?", "options": ["They have no natural predators", "They have lower reproductive rates", "They require less food", "They increase biodiversity"], "answer": 0 },
+    { "question": "What happens to energy as it moves up a food chain?", "options": ["It increases", "It stays the same", "It decreases", "It cycles back to producers"], "answer": 2 },
+    { "question": "Which activity contributes the most to habitat destruction?", "options": ["Fishing", "Deforestation", "Recycling", "Organic farming"], "answer": 1 },
+    { "question": "Why does the human body need homeostasis?", "options": ["To maintain internal balance", "To change constantly", "To increase energy", "To grow new organs"], "answer": 0 },
+    { "question": "Which scientific advancement had the greatest impact on modern medicine?", "options": ["The discovery of bacteria", "The development of antibiotics", "Improved cancer treatments", "The creation of the steam engine"], "answer": 1 },
+    { "question": "Which of the following represents an example of a renewable energy source?", "options": ["Coal", "Natural gas", "Wind", "Nuclear fuel"], "answer": 2 },
+    { "question": "Which of the following is the most responsible way to dispose of electronic waste?", "options": ["Burn it", "Throw it in a landfill", "Recycle it", "Bury it underground"], "answer": 2 },
+
+    { "question": "A scientist graphs temperature vs. reaction rate and finds the data follows an exponential curve. What does this suggest?", "options": ["Reaction rate decreases as temperature increases", "Reaction rate is independent of temperature", "Reaction rate increases rapidly with temperature", "Reaction rate follows a linear relationship with temperature"], "answer": 2 },
+    { "question": "Why does a metal spoon feel colder than a wooden spoon at the same temperature?", "options": ["Metal has a higher specific heat", "Metal is a better conductor of heat", "Wood has a higher density", "Wood absorbs more heat from your hand"], "answer": 1 },
+    { "question": "A roller coaster reaches its highest point before descending. At the peak, what energy transformation is occurring?", "options": ["Kinetic to potential", "Potential to kinetic", "Thermal to mechanical", "Chemical to kinetic"], "answer": 1 },
+    { "question": "A scientist measures the pH of a solution and finds it to be 3. How would this be classified?", "options": ["Strong base", "Weak base", "Neutral", "Acidic"], "answer": 3 },
+    { "question": "What happens to an enzyme when it is exposed to extremely high temperatures?", "options": ["It speeds up", "It denatures", "It becomes more efficient", "It stops working permanently"], "answer": 1 },
+    { "question": "Why does a prism create a rainbow effect when white light passes through it?", "options": ["Light slows down in a vacuum", "Different wavelengths of light refract at different angles", "The prism absorbs certain colors", "The prism polarizes the light"], "answer": 1 },
+    { "question": "A population of rabbits has increased rapidly over a few years. What is the most likely limiting factor that will slow this growth?", "options": ["More food available", "Increased space", "Predation or lack of resources", "Genetic mutation"], "answer": 2 },
+    { "question": "How does DNA differ from RNA?", "options": ["DNA has ribose, while RNA has deoxyribose", "DNA contains uracil, while RNA contains thymine", "RNA is single-stranded, while DNA is double-stranded", "RNA is found only in the nucleus"], "answer": 2 },
+    { "question": "Which best explains why biodiversity is important in an ecosystem?", "options": ["It ensures no species become extinct", "It helps ecosystems recover from disturbances", "It prevents predators from existing", "It eliminates the need for producers"], "answer": 1 },
+    { "question": "Which factor is a major contributor to climate change?", "options": ["Volcanic eruptions", "Increase in greenhouse gas emissions", "Decreased human activity", "Changes in Earth's orbit"], "answer": 1 },
+    { "question": "A person touches a hot metal surface and quickly pulls their hand away. What part of the nervous system is responsible for this response?", "options": ["Cerebrum", "Cerebellum", "Reflex arc", "Endocrine system"], "answer": 2 },
+    { "question": "Which process directly provides the energy needed for muscle contraction?", "options": ["Osmosis", "ATP hydrolysis", "Photosynthesis", "Mitosis"], "answer": 1 },
+    { "question": "Which statement best describes natural selection?", "options": ["Individuals evolve within their lifetime", "The environment selects for traits that improve survival and reproduction", "Mutations always make organisms stronger", "All individuals in a population change at the same time"], "answer": 1 },
+    { "question": "Which of the following best explains why some bacteria become resistant to antibiotics over time?", "options": ["They learn to avoid antibiotics", "They mutate and pass on resistance genes", "The antibiotics become weaker", "All bacteria are naturally resistant"], "answer": 1 },
+    { "question": "Which of the following is an example of potential energy?", "options": ["A ball rolling down a hill", "A stretched rubber band", "A car driving on a highway", "A lit light bulb"], "answer": 1 },
+    { "question": "A person is standing still but suddenly starts running. What must have happened according to Newton’s laws?", "options": ["Their inertia decreased", "An unbalanced force acted on them", "They lost mass", "Gravity stopped affecting them"], "answer": 1 },
+    { "question": "Which type of chemical bond involves the transfer of electrons?", "options": ["Covalent", "Ionic", "Hydrogen", "Metallic"], "answer": 1 },
+    { "question": "Which is a major concern regarding human impact on biodiversity?", "options": ["Increasing genetic diversity", "Overfishing and habitat destruction", "Introducing more predators into ecosystems", "Removing invasive species"], "answer": 1 },
+    { "question": "Which part of a neuron receives incoming signals?", "options": ["Axon", "Dendrites", "Myelin sheath", "Nucleus"], "answer": 1 },
+    { "question": "Which type of reproduction results in offspring that are genetically identical to the parent?", "options": ["Sexual reproduction", "Asexual reproduction", "Cross-pollination", "Hybridization"], "answer": 1 },
+    { question: "What is the smallest unit of life?", options: ["Atom", "Molecule", "Cell", "Organ"], answer: 2 },
+    { question: "Which planet has the largest volcano in the solar system?", options: ["Earth", "Mars", "Jupiter", "Venus"], answer: 1 },
+    { question: "What is the primary gas in Earth's atmosphere?", options: ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"], answer: 2 },
+    { question: "Which subatomic particle has a negative charge?", options: ["Proton", "Neutron", "Electron", "Photon"], answer: 2 },
+    { question: "What is the acceleration due to gravity on Earth?", options: ["9.8 m/s²", "1.6 m/s²", "4.5 m/s²", "12.2 m/s²"], answer: 0 },
+    { question: "Which of the following is an example of a chemical change?", options: ["Ice melting", "Paper burning", "Water boiling", "Salt dissolving"], answer: 1 },
+    { question: "What is the most abundant element in the universe?", options: ["Oxygen", "Helium", "Carbon", "Hydrogen"], answer: 3 },
+    { question: "What is the process by which plants convert sunlight into chemical energy?", options: ["Respiration", "Photosynthesis", "Fermentation", "Digestion"], answer: 1 },
+    { question: "What type of rock is formed from cooling lava?", options: ["Sedimentary", "Metamorphic", "Igneous", "Fossilized"], answer: 2 },
+    { question: "Which force keeps planets in orbit around the Sun?", options: ["Magnetic", "Frictional", "Electromagnetic", "Gravitational"], answer: 3 },
+    { question: "Which vitamin is produced in the skin when exposed to sunlight?", options: ["Vitamin A", "Vitamin B12", "Vitamin C", "Vitamin D"], answer: 3 },
+    { question: "Which scientist proposed the three laws of motion?", options: ["Einstein", "Darwin", "Newton", "Galileo"], answer: 2 },
+    { question: "What is the boiling point of water at sea level?", options: ["100°C", "0°C", "212°F", "Both A and C"], answer: 3 },
+    { question: "Which part of the human body contains the most bones?", options: ["Skull", "Leg", "Hand", "Spine"], answer: 2 },
+    { question: "Which of the following is an example of a vector quantity?", options: ["Speed", "Mass", "Time", "Velocity"], answer: 3 },
+    { question: "What is the function of red blood cells?", options: ["Fight infections", "Clot blood", "Transport oxygen", "Digest food"], answer: 2 },
+    { question: "Which part of the atom determines its chemical properties?", options: ["Neutrons", "Electrons", "Protons", "Nucleus"], answer: 1 },
+    { question: "Which scientist developed the theory of relativity?", options: ["Isaac Newton", "Galileo Galilei", "Albert Einstein", "Marie Curie"], answer: 2 },
+
+   { question: "Which of the following best explains why scientific theories change over time?", options: [
+        "New evidence and better technology lead to revised conclusions.", 
+        "Scientists vote on which theories they prefer.", 
+        "Older theories become outdated and are no longer considered valid.", 
+        "Once a theory is established, it never changes." 
+    ], 
+    answer: 0 
+},
+
+
+
+        ];
+
+  
+
+    let userAnswers = []; // Track attempts for each question
+    let totalScore = 0;
+
+    // Render questions dynamically
+    const questionContainer = document.getElementById("questions");
+    questions.forEach((q, index) => {
+        const questionDiv = document.createElement("div");
+        questionDiv.classList.add("question");
+
+        const questionText = document.createElement("h3");
+        questionText.textContent = `${index + 1}. ${q.question}`;
+        questionDiv.appendChild(questionText);
+
+        const optionsDiv = document.createElement("div");
+        optionsDiv.classList.add("options");
+
+        // Initialize attempts for this question
+        userAnswers[index] = { attempts: 0, correct: false };
+
+        q.options.forEach((option, optionIndex) => {
+            const optionButton = document.createElement("button");
+            optionButton.textContent = option;
+            optionButton.onclick = () => {
+                // Handle user guess
+                if (!userAnswers[index].correct) {
+                    userAnswers[index].attempts++;
+
+                    if (optionIndex === q.answer) {
+                        userAnswers[index].correct = true;
+
+                        // Calculate score based on attempts
+                        const score = userAnswers[index].attempts === 1 ? 2 : 1; // Full points for first guess, partial for second
+                        totalScore += score;
+
+                        optionButton.style.backgroundColor = "#b2f2bb";
+                        optionButton.disabled = true; // Disable after correct guess
+                        alert(`Correct! You earned ${score} point(s).`);
+                    } else {
+                        optionButton.style.backgroundColor = "#ffb3b3";
+                        optionButton.disabled = true; // Disable incorrect choice
+                        alert(userAnswers[index].attempts < 2 ? "Incorrect. Try again!" : "Incorrect. No points for this question.");
+                    }
+                }
+            };
+            optionsDiv.appendChild(optionButton);
+        });
+
+        questionDiv.appendChild(optionsDiv);
+        questionContainer.appendChild(questionDiv);
+    });
+
+    // Function to calculate and display the final score
+    function gradeQuiz() {
+        const maxScore = questions.length * 2; // Each question can score up to 2 points
+        document.getElementById("result").textContent = `Your final score: ${totalScore} / ${maxScore}`;
+    }
+</script>
+
+</body>
+</html>
